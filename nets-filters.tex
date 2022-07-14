@@ -1,0 +1,846 @@
+% Document setup
+\documentclass[article, a4paper, 11pt, oneside]{memoir}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[UKenglish]{babel}
+
+% Document info
+\newcommand\doctitle{Notes on nets and filters}
+\newcommand\docauthor{Danny Nygård Hansen}
+
+% Formatting and layout
+\usepackage[autostyle]{csquotes}
+\usepackage[final]{microtype}
+\usepackage{xcolor}
+\frenchspacing
+\usepackage{latex-sty/articlepagestyle}
+\usepackage{latex-sty/articlesectionstyle}
+% \usepackage{latex-sty/amalgsymbol}
+
+% Fonts
+\usepackage[largesmallcaps]{kpfonts}
+\DeclareSymbolFontAlphabet{\mathrm}{operators} % https://tex.stackexchange.com/questions/40874/kpfonts-siunitx-and-math-alphabets
+\linespread{1.06}
+\let\mathfrak\undefined
+\usepackage{eufrak}
+\usepackage{inconsolata}
+% \usepackage{amssymb}
+
+% Hyperlinks
+\usepackage{hyperref}
+\definecolor{linkcolor}{HTML}{4f4fa3}
+\hypersetup{%
+	pdftitle=\doctitle,
+	pdfauthor=\docauthor,
+	colorlinks,
+	linkcolor=linkcolor,
+	citecolor=linkcolor,
+	urlcolor=linkcolor,
+	bookmarksnumbered=true
+}
+
+% Equation numbering
+\numberwithin{equation}{chapter}
+
+% Footnotes
+\footmarkstyle{\textsuperscript{#1}\hspace{0.25em}}
+
+% Mathematics
+\usepackage{latex-sty/basicmathcommands}
+\usepackage{latex-sty/framedtheorems}
+\usepackage{latex-sty/topologycommands}
+\usepackage{tikz-cd}
+\tikzcdset{arrow style=math font} % https://tex.stackexchange.com/questions/300352/equalities-look-broken-with-tikz-cd-and-math-font
+\usetikzlibrary{babel}
+
+% Lists
+\usepackage{enumitem}
+\setenumerate[0]{label=\normalfont(\alph*)}
+\setlist{  
+  listparindent=\parindent,
+  parsep=0pt,
+}
+
+% Bibliography
+\usepackage[backend=biber, style=authoryear, maxcitenames=2, useprefix]{biblatex}
+\addbibresource{references.bib}
+
+% Title
+\title{\doctitle}
+\author{\docauthor}
+
+\newcommand{\setF}{\mathbb{F}}
+\newcommand{\ev}{\mathrm{ev}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\strucS}{\mathfrak{S}}
+\DeclarePairedDelimiter{\gen}{\langle}{\rangle} % Generating set
+\newcommand{\frakL}{\mathfrak{L}}
+\newcommand{\frakN}{\mathfrak{N}}
+\newcommand{\frakA}{\mathfrak{A}}
+\newcommand{\frakB}{\mathfrak{B}}
+\newcommand{\ab}{\mathit{ab}}
+
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\stab}{Stab}
+
+% Categories
+\newcommand{\cat}[1]{\mathcal{#1}}
+\newcommand{\scat}[1]{\mathbf{#1}} % category supposed to be small
+\newcommand{\ncat}[1]{\mathbf{#1}} % named categories like Set, Top
+
+\newcommand{\catSet}{\ncat{Set}} % Category of sets
+\newcommand{\catGrp}{\ncat{Grp}} % Category of groups
+\newcommand{\catAb}{\ncat{Ab}} % Category of abelian groups
+\newcommand{\catRing}{\ncat{Ring}} % Category of rings
+\newcommand{\catFld}{\ncat{Fld}} % Category of fields
+
+\newcommand{\catMod}[1]{{#1\text{-}\scat{Mod}}}
+\newcommand{\catRMod}{\catMod{R}}
+
+\newcommand{\End}{\mathrm{End}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\DeclareMathOperator{\chr}{char}
+
+
+%% Framed exercise environment
+
+\mdfdefinestyle{swannexercise}{%
+    skipabove=0.5em plus 0.4em minus 0.2em,
+	skipbelow=0.5em plus 0.4em minus 0.2em,
+	leftmargin=-5pt,
+	rightmargin=-5pt,
+	innerleftmargin=5pt,
+	innerrightmargin=5pt,
+	innertopmargin=5pt,
+	innerbottommargin=4pt,
+	linewidth=0pt,
+	splittopskip=1.2em minus 0.2em,
+	splitbottomskip=0.5em plus 0.2em minus 0.1em,
+	backgroundcolor=backgroundcolor,
+	frametitlebackgroundcolor=titlecolor,
+	frametitlefont={\scshape},
+    theoremseparator={},
+    % theoremspace={},
+	frametitleaboveskip=3pt,
+	frametitlebelowskip=2pt
+}
+
+\mdtheorem[style=swannexercise]{exerciseframed}{Exercise}
+
+\let\oldexerciseframed\exerciseframed
+\renewcommand{\exerciseframed}{%
+  \crefalias{theorem}{exerciseframed}%
+  \oldexerciseframed}
+
+\usepackage{listofitems}
+
+\settocdepth{subsection}
+\renewenvironment{exerciseframed}[1][]{%
+    \setsepchar{.}%
+    \readlist*\mylist{#1}%
+    \def\smalllabel{\mylist[2].\mylist[3]}%
+    \refstepcounter{exerciseframed}%
+    % \addcontentsline{toc}{subsection}{Exercise \smalllabel}%
+    \begin{exerciseframed*}[#1]%
+    \label{ex:#1}%
+}{%
+    \end{exerciseframed*}%
+}
+
+% https://tex.stackexchange.com/a/23491/63353
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+
+\newcommand{\exref}[1]{%
+    % \setsepchar{.}%
+    % \readlist*\mylist{#1}%
+    % \ifnum \arabic{chapter}=\mylist[1]
+    %     \def\mylabel{\mylist[2].\mylist[3]}%
+    % \else
+    %     \def\mylabel{\RNum{\mylist[1]}.\mylist[2].\mylist[3]}%
+    % \fi
+    \hyperref[ex:#1]{Exercise~#1}%
+}
+
+\theoremstyle{nonumberplain}
+\theoremsymbol{\ensuremath{\square}}
+\newtheorem{solution}{Solution}
+
+\let\oldsolution\solution
+\renewcommand{\solution}{%
+  \crefalias{theorem}{solution}%
+  \oldsolution}
+
+\newcommand{\solutionlabelfont}[1]{{\normalfont\color{linkcolor}#1}}
+\newlist{solutionsec}{enumerate}{1}
+\setlist[solutionsec]{leftmargin=0pt, parsep=0pt, listparindent=\parindent, font=\solutionlabelfont, label=(\alph*), labelsep=0pt, labelwidth=20pt, itemindent=20pt, align=left, itemsep=10pt}
+
+
+% \renewcommand{\thechapter}{\Roman{chapter}}
+% \renewcommand{\thesection}{\arabic{section}}
+
+\DeclarePairedDelimiter{\ord}{\lvert}{\rvert}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Inn}{Inn}
+
+\usepackage{caption} % Links to figures jump correctly
+\Crefname{figure}{Figure}{Figures}
+
+
+\newenvironment{displaytheorem}{%
+	\begin{displayquote}\itshape%
+}{%
+	\end{displayquote}%
+}
+
+
+\newcommand{\upset}{\operatorname{\uparrow}}
+\newcommand{\downset}{\operatorname{\downarrow}}
+\newcommand{\matgroup}[3]{\mathrm{#1}_{#2}(#3)}
+\newcommand{\GL}[2]{\matgroup{GL}{#1}{#2}}
+\newcommand{\SL}[2]{\matgroup{SL}{#1}{#2}}
+\newcommand{\catGSet}[1][G]{{#1\text{-}\catSet}}
+\newcommand{\frakI}{\mathfrak{I}}
+\newcommand{\field}{\mathbb{F}}
+\let\bigcoprod\coprod
+\renewcommand{\coprod}{\sqcup}
+
+
+\begin{document}
+
+\maketitle
+
+
+\chapter{Basic theory of nets}
+
+If $P$ is a preordered set, then a subset $A \subseteq P$ is said to be \emph{cofinal} in $P$ if for every $x \in P$ there is a $y \in A$ with $x \leq y$. A function $f \colon P \to Q$ between ordered sets is said to be \emph{cofinal} if $f(P)$ is cofinal in $Q$.
+
+
+\newcommand{\mynet}{u}
+\newcommand{\subnet}{v}
+\newcommand{\altnet}{v}
+\newcommand{\newnet}{w}
+\newcommand{\mylimit}{x}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\nhoods}[1]{\calN_{#1}}
+\newcommand\tail[2][]{%
+    \ifstrempty{#1}{%
+        T_{#2}
+    }{%
+        T^{#1}_{#2}
+    }%
+}
+\newcommand{\tails}[1]{\calT_{#1}}
+
+\begin{definition}[Nets]
+    Let $X$ be a set. A \emph{net} in $X$ is a function $\mynet \colon I \to X$, where $I$ is a nonempty directed set. The value $\mynet(i)$ at $i \in I$ is usually denoted $\mynet_i$.
+    
+    Given $i \in I$, the set
+    %
+    \begin{equation*}
+        \tail{i}
+            = \tail[\mynet]{i}
+            = \set{\mynet_j \in A}{j \geq i}
+    \end{equation*}
+    %
+    is called the \emph{tail of $\mynet$ following $i$}. The collection of tails of $\mynet$ is denoted $\tails{\mynet}$.
+\end{definition}
+%
+Some authors allow the domain $I$ to be empty (e.g. \textcite{willard}, \cite{folland2007}), while others do not (e.g. \cite{kelley1975}, \cite{beardon1997}, who both require even directed sets to be nonempty). We require $I$ to be nonempty since it makes the correspondence between nets and filters nicer, since filters are required to be nonempty.
+
+Notice that $\tails{\mynet}$ is downward directed with respect to set inclusion: For $i, j \in I$ there is a $k \in A$ with $i, j \leq k$, and hence $\tail{k} \subseteq \tail{i} \intersect \tail{j}$. Intuitively speaking, every pair of tails of $\mynet$ \enquote{meet} somewhere in the future.
+
+\begin{definition}
+    Let $\mynet \colon I \to X$ be a net, and let $A \subseteq X$.
+    %
+    \begin{enumerate}
+        \item The net $\mynet$ is \emph{eventually in $A$} if there exists a tail $T \in \tails{\mynet}$ such that $T \subseteq A$. Equivalently, there exists an $i \in I$ such that $\mynet_j \in A$ for all $j \geq i$.
+
+        \item The net $\mynet$ is \emph{frequently/cofinally in $A$} if $T \intersect A \neq \emptyset$ for all $T \in \tails{\mynet}$. Equivalently, for all $i \in I$ there exists a $j \geq i$ such that $\mynet_j \in E$, i.e. $\mynet\preim(A)$ is cofinal in $I$.
+    \end{enumerate}
+\end{definition}
+%
+In particular, since $\tails{\mynet}$ is downward directed, if $\mynet$ is eventually in $A$ then it is frequently in $A$. Notice also that $\mynet$ is \emph{not} eventually in $A$ if and only if it is frequently in $X \setminus A$.
+
+\begin{definition}
+    Let $\mynet \colon I \to X$ be a net in a topological space $X$, and let $\mylimit \in X$.
+    %
+    \begin{enumerate}
+        \item The net $\mynet$ \emph{converges to $\mylimit$} if $\mynet$ is eventually in $N$ for all $N \in \nhoods{\mylimit}$, i.e. if
+        %
+        \begin{equation*}
+            \forall N \in \nhoods{\mylimit} \; \exists T \in \tails{\mynet} \colon T \subseteq N.
+        \end{equation*}
+        %
+        In this case we use either of the following notations:
+        %
+        \begin{equation*}
+            \mynet \to \mylimit, \quad
+            \mynet_i \to \mylimit, \quad
+            \lim \mynet = \mylimit, \quad
+            \lim_{i \in I} \mynet_i = \mylimit.
+        \end{equation*}
+
+        \item The point $\mylimit$ is a \emph{cluster point} of $\mynet$ if $\mynet$ is frequently in $N$ for all $N \in \nhoods{\mylimit}$, i.e. if
+        %
+        \begin{equation*}
+            \forall N \in \nhoods{\mylimit}, T \in \tails{\mynet} \colon T \intersect N \neq \emptyset.
+        \end{equation*}
+    \end{enumerate}
+\end{definition}
+%
+Thus if $\mynet \to \mylimit$, then $\mylimit$ is a cluster point of $\mynet$.
+
+Next we consider \emph{subnets}. There are at least three different, non-equivalent definitions of subnets:
+
+\begin{definition}[Subnets]
+    \label{def:subnets}
+    Let $\mynet \colon I \to X$ and $\subnet \colon J \to X$ be nets in a set $X$.
+    
+    \begin{enumerate}
+        \item We say that $\subnet$ is a \emph{(Aarnes--Andenæs) subnet} of $\mynet$ if for all $A \subseteq X$,
+        %
+        \begin{equation*}
+            \text{$\mynet$ is eventually in $A$}
+            \quad \implies \quad
+            \text{$\subnet$ is eventually in $A$},
+        \end{equation*}
+        %
+        or equivalently if
+        %
+        \begin{equation*}
+            \text{$\subnet$ is frequently in $A$}
+            \quad \implies \quad
+            \text{$\mynet$ is frequently in $A$}.
+        \end{equation*}
+
+        \item We say that $\subnet$ is a \emph{Kelley subnet} of $\mynet$ if there exists a function $\phi \colon J \to I$ such that
+        %
+        \begin{enumerate}
+            \item $\subnet = \mynet \circ \phi$, and
+            \item for each $i_0 \in I$ there is a $j_0 \in J$ such that $j \geq j_0$ implies that $\phi(j) \geq i_0$.
+        \end{enumerate}
+
+        \item We say that $\subnet$ is a \emph{Willard subnet} of $\mynet$ if there exists a function $\phi \colon J \to I$ such that
+        %
+        \begin{enumerate}
+            \item $\subnet = \mynet \circ \phi$,
+            \item $\phi$ is monotone, and
+            \item $\phi$ is cofinal, i.e. for each $i_0 \in I$ there is a $j_0 \in J$ such that $\phi(j_0) \geq i_0$.
+        \end{enumerate}
+    \end{enumerate}
+\end{definition}
+%
+It will turn out that Aarnes--Andenæs subnets (henceforth simply \enquote{AA subnets}) will be most important to us. We may equip the class of nets in a set $X$ with a preorder by letting $\subnet \leq \mynet$ if $\subnet$ is an AA subnet of $\mynet$. If both $\subnet \leq \mynet$ and $\mynet \leq \subnet$, then we say that $\mynet$ and $\subnet$ are \emph{equivalent} and write $\mynet \sim \subnet$. As with sequences, if $\mynet \to \mylimit$ and $\subnet$ is a subnet (of any kind) of $\mynet$, then also $\subnet \to \mylimit$. This is clear for AA subnets, and will follow for the other two kinds from the following remark:
+
+\begin{remarkbreak}[Relationship between definitions of subnets]
+    We claim that each Willard subnet is a Kelley subnet, and each Kelley subnet is an AA subnet. For the first claim, let $i_0 \in I$ and choose $j_0$ in accordance with [ref?]. For $j \in J$ with $j \geq j_0$ we thus have
+    %
+    \begin{equation*}
+        \phi(j)
+            \geq \phi(j_0)
+            \geq i_0
+    \end{equation*}
+    %
+    as desired.
+
+    Next assume that $\subnet$ is a Kelley subnet of $\mynet$, assume that $\subnet$ is frequently in some $A \subseteq X$, and let $i_0 \in I$. Choose $j_0 \in J$ such that $j \geq j_0$ implies $\phi(j) \geq i_0$. There is some $j \in J$ such that $\mynet_{\phi(j)} = \subnet_j \in A$. Hence $\mynet$ is frequently in $A$, so $\subnet$ is an AA subnet.
+
+    [TODO: converses don't hold, see Schachter.]
+\end{remarkbreak}
+
+\begin{lemma}
+    Let $\mynet \colon I \to X$ and $\altnet \colon J \to X$ be nets in a set $X$ with the property that $T_1 \intersect T_2 \neq \emptyset$ for all $T_1 \in \tails{\mynet}$ and $\tails{\altnet}$. Then $\mynet$ and $\altnet$ have a common Willard subnet $\newnet$.
+
+    Furthermore, $\newnet$ can be chosen to be maximal among common AA subnets of $\mynet$ and $\altnet$: That is, any common AA subnet of $\mynet$ and $\altnet$ is also an AA subnet of $\newnet$.
+\end{lemma}
+%
+We have stated the lemma in terms of two nets, but the proof generalises in an obvious way to any finite number of nets.
+
+\begin{proof}
+    For $i_0 \in I$ and $j_0 \in J$, notice that
+    %
+    \begin{equation*}
+        \set{x \in X}{x = \mynet_i = \altnet_j \text{ for some } i \geq i_0, j \geq j_0}
+            = \tail[\mynet]{i_0} \intersect \tail[\altnet]{j_0}
+            \neq \emptyset.
+    \end{equation*}
+    %
+    Hence the set
+    %
+    \begin{equation*}
+        K
+            = \set{(i,j) \in I \prod J}{\mynet_i = \altnet_j}
+    \end{equation*}
+    %
+    is nonempty, and if $I \prod J$ is equipped with the product order, it is easy to see that $K$ is directed. Define a net $\newnet \colon K \to X$ by defining $\newnet_{(i,j)}$ as the common value $\mynet_i = \altnet_j$. Then $\newnet = \mynet \circ \pi_1|_K$, where $\pi_1 \colon I \prod J \to I$ is the projection onto $I$. This trivially satisfies the conditions in [TODO Willard subnet ref], showing that $\newnet$ is a Willard subnet of both $\mynet$ and $\altnet$.
+    
+    It is also easy to see that
+    %
+    \begin{equation*}
+        \tail[\newnet]{(i,j)}
+            = \tail[\mynet]{i} \intersect \tail[\altnet]{j}
+    \end{equation*}
+    %
+    for all $(i,j) \in K$. [TODO] The theory of filters then shows that $\newnet$ is maximal as claimed.
+\end{proof}
+
+
+\begin{corollary}
+    Let $\mynet$ be a net, and let $\subnet$ be an AA subnet. Then $\mynet$ has a Willard subnet that is equivalent to $\subnet$.
+\end{corollary}
+
+\begin{proof}
+    Notice that $\mynet$ and $\subnet$ have a common AA subnet, namely $\subnet$. But [TODO ref] yields a maximal common Willard subnet $\newnet$, and by maximality $\subnet$ is also a subnet of $\newnet$. Hence these are equivalent as claimed.
+\end{proof}
+%
+Thus the three types of subnets can be used interchangably, insofar as the properties of a subnet are invariant up to equivalence. We will use AA subnets since their correspondence with superfilters is nicer, and henceforth \enquote{subnet} will mean AA subnet.
+
+
+
+\chapter{Basic theory of filters}
+
+\begin{definition}[Filters]
+    Let $X$ be a set. A \emph{filter on $X$} is a proper filter $\calF$ on the powerset $\powerset{X}$ ordered by inclusion. That is, $\calF$ is a nonempty collection of subsets of $X$ that is
+    %
+    \begin{enumerate}
+        \item proper, i.e. $\emptyset \not\in \calF$,
+        \item downward directed, i.e., for $F_1, F_2 \in \calF$ there is an $F_3 \in \calF$ such that $F_3 \subseteq F_1, F_2$, and
+        \item upward closed, i.e. $\calF = \calF^\uparrow$.
+    \end{enumerate}
+\end{definition}
+%
+The condition (c) means that if $F \in F$ and $F \subseteq G$, then $G \in \calF$. By [TODO remark ref], in the presence of (c) condition (b) [TODO links] is equivalent to $\calF$ being closed under (binary) intersections.
+
+We want a way to generate filters from less restrictive collections of sets. \Textcite[Exercise~2.22]{daveypriestley2002} gives a general way to do this, and we notice that if $\emptyset \neq \calB \subseteq \powerset{X}$ is already downward directed, then the filter generated by $\calB$ is just $\calB^\uparrow$. In fact, it is trivial to show that (in a general lattice) $\calB$ is downward directed if and only if $\calB^\uparrow$ is, so $\calB^\uparrow$ is a (not necessarily proper) filter if and only if $\calB$ is downward directed. If we further require that $\calB$ not contain the empty set, then $\calB^\uparrow$ is a filter in the above sense. This motivates the following definition:
+
+\begin{definition}[Filter bases]
+    Let $X$ be a set. A \emph{filter basis on $X$} is a nonempty collection $\calB$ of subsets of $X$ that is
+    %
+    \begin{enumerate}
+        \item proper, and
+        \item downward directed.
+    \end{enumerate}
+    %
+    The filter \emph{generated by $\calB$} is the filter $\calB^\uparrow$. If $\calF$ is a filter on $X$ and $\calF = \calB^\uparrow$, then $\calB$ is called a \emph{basis} for $\calF$.
+\end{definition}
+
+If $X$ is a topological space and $\mylimit \in X$, then we denote the family of neighbourhoods of $\mylimit$ by $\nhoods{\mylimit}$. Notice that this is a filter on $X$.
+
+\begin{definition}
+    Let $\calF$ be a filter on a topological space $X$, and let $\mylimit \in X$.
+    %
+    \begin{enumerate}
+        \item The filter $\calF$ \emph{converges to $\mylimit$} if $\nhoods{\mylimit} \subseteq \calF$. In this case we write $\calF \to \mylimit$.
+        
+        \item The point $\mylimit$ is called a \emph{cluster point} of $\calF$ if
+        %
+        \begin{equation*}
+            \forall N \in \nhoods{\mylimit}, F \in \calF \colon F \intersect N \neq \emptyset.
+        \end{equation*}
+    \end{enumerate}
+\end{definition}
+%
+Thus if $\calF \to \mylimit$, then $\mylimit$ is a cluster point of $\calF$. Notice the similarity between the definition of cluster points for nets and filters respectively.
+
+\begin{remark}
+    \label{rem:filter-cluster-points}
+    Notice also that if $\calB$ is a basis for the filter $\calF$ and $\nhoods{\mylimit} \subseteq \calB$, then $\calF \to \mylimit$. Furthermore, for every $F \in \calF$ there is a $B \in \calB$ with $B \subseteq F$. So if $B \intersect N \neq \emptyset$ then also $F \intersect N \neq \emptyset$. Hence we may also replace $\calF$ with $\calB$ in (b) [TODO ref].
+\end{remark}
+
+In the theory of filters, the concept corresponding to subnets is that of \emph{superfilters}:
+
+\begin{definition}[Superfilters]
+    Let $\calF$ and $\calG$ be filters on the same set $X$. We say that $\calG$ is a \emph{superfilter} of $\calF$ if $\calF \subseteq \calG$.
+\end{definition}
+%
+We sometimes also say that $\calF$ is a \emph{subfilter} of $\calG$, or that $\calF$ is \emph{finer} than $\calG$ and $\calG$ \emph{courser} than $\calF$. The class of filters on a fixed set is of course partially ordered by inclusion.
+
+Notice that if $\calF \to \mylimit$ and $\calG$ is a superfilter of $\calF$, then also $\calG \to \mylimit$ as we would expect if superfilters are to play the role of subnets.
+
+
+\chapter{Correspondence between nets and filters}
+
+\newcommand{\filter}{\mathfrak{F}}
+
+\newcommand{\filters}[1]{\mathfrak{F}(#1)}
+\newcommand{\nets}[1]{\mathfrak{N}(#1)}
+\newcommand{\netseq}[1]{\tilde{\mathfrak{N}}(#1)}
+
+\newcommand{\evfilt}[1][]{\Phi_{#1}}
+\newcommand{\evfilteq}[1][]{\tilde{\Phi}_{#1}}
+\newcommand{\subord}{\vdash}
+
+We wish to study the correspondence between nets and filters on a fixed set $X$. Given a net $\mynet$ in $X$, recall that the collection $\tails{\mynet}$ of tails of $\mynet$ is downward directed, so $(\tails{\mynet})^\uparrow$ is indeed a filter, namely the smallest filter containing all tails of $\mynet$. We call this the \emph{eventuality filter} of $\mynet$ and denote it by $\evfilt[\mynet]$. This defines a map $\evfilt \colon \nets{X} \to \filters{X}$ given by $\evfilt(\mynet) = \evfilt[\mynet]$.
+
+Furthermore, we define an ordering $\subord$ on the set of filters by letting $\calG \subord \calF$ if $\calF \subseteq \calG$ (i.e. $\subord$ is dual to set inclusion), and in this case we say that $\calG$ is \emph{subordinate} to $\calF$.
+
+\begin{lemma}
+    Let $\calF$ be a filter on a set $X$. There exists a net $\mynet$ in $X$ such that $\calF = \tails{\mynet}$. In particular $\calF = \evfilt[\mynet]$, so the map $\evfilt$ is surjective.
+\end{lemma}
+
+\begin{proof}
+    Let $\calF$ be a filter on $X$ and define a direction on the set
+    %
+    \begin{equation*}
+        I
+            = \set{(x,F)}{x \in F \in \calF}
+    \end{equation*}
+    %
+    by letting $(x,F) \leq (y,G)$ if $G \subseteq F$. Define a net $\mynet \colon I \to X$ by $\mynet_{(x,F)} = x$. Notice that
+    %
+    \begin{equation*}
+        \tail{(x,F)}
+            = \set{ \mynet_{(y,G)} }{ y \in G \subseteq F }
+            = \set{ y }{ y \in G \subseteq F }
+            = F,
+    \end{equation*}
+    %
+    so each tail lies in $\calF$, and every element in $\calF$ is a tail. Hence $\calF = \tails{\mynet}$, which implies that
+    %
+    \begin{equation*}
+        \evfilt[\mynet]
+            = (\tails{\mynet})^\uparrow
+            = \calF^\uparrow
+            = \calF,
+    \end{equation*}
+    %
+    since $\calF$ is already a filter.
+\end{proof}
+
+\begin{theorem}
+    Let $\mynet$ and $\subnet$ be nets in a set $X$. For $F \subseteq X$ we have
+    %
+    \begin{enumerate}
+        \item $F \in \evfilt[\mynet]$ if and only if $\mynet$ is eventually in $F$, and
+        \item $\subnet \leq \mynet$ if and only if $\evfilt[\subnet] \subord \evfilt[\mynet]$.
+    \end{enumerate}
+    %
+    In particular, the map $\evfilt \colon (\nets{X}, \leq) \to (\filters{X}, \subord)$ is monotone.
+\end{theorem}
+
+\begin{proof}
+\begin{proofsec}
+    \item[(a)]
+    We have $F \in \evfilt[\mynet] = (\tails{\mynet})^\uparrow$ if and only if $F$ contains a tail $T$ of $\mynet$, and this is the case if and only if $\mynet$ is eventually in $F$.
+
+    \item[(b)]
+    The filter $\evfilt[\mynet]$ contains those subsets $F \subseteq X$ such that $\mynet$ is eventually in $F$, so this follows immediately from (a).
+\end{proofsec}
+\end{proof}
+
+\newcommand{\myinv}[1][]{\tilde{\Psi}_{#1}}
+
+This motivates the following construction: If $\mynet$ is a net in $X$, denote by $[\mynet]$ the $\sim$-equivalence class of $\mynet$. [TODO ref theorem] then says that the map $\evfilt$ induces a map $\evfilteq \colon \netseq{X} \to \filters{X}$ which sends a class $[\mynet]$ to $\evfilt[\mynet]$, and that this map is injective. It inherits surjectivity from $\evfilt$, so it is in fact a bijection, hence an order isomorphism. We denote its inverse by $\myinv$.
+
+
+\begin{corollary}
+    Let $\mynet$ be a net in a topological space $X$, and let $\mylimit \in X$. We then have that
+    %
+    \begin{enumerate}
+        \item $\mynet \to \mylimit$ if and only if $\evfilt[\mynet] \to \mylimit$, and
+        \item $\mylimit$ is a cluster point of $\mynet$ iff it is a cluster point of $\evfilt[\mynet]$.
+    \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+    \begin{proofsec}
+        \item[(a)]
+        Apply [theorem] to each neighbourhood in $\nhoods{\mylimit}$.
+
+        \item[(b)]
+        Notice that $\mylimit$ is a cluster point of $\mynet$ if and only if
+        %
+        \begin{equation*}
+            \forall N \in \nhoods{\mylimit}, T \in \tails{\mynet} \colon N \intersect T \neq \emptyset.
+        \end{equation*}
+        %
+        Since $\tails{\mynet}$ is a basis for $\evfilt[\mynet]$, by \cref{rem:filter-cluster-points} the above holds if and only if $\mylimit$ is a cluster point of $\evfilt[\mynet]$.
+    \end{proofsec}
+\end{proof}
+
+
+\chapter{Cluster points}
+
+Next we see that cluster points can be characterised in terms of subnets and superfilters, just as limit points can in terms of sequences in a metric space.
+
+\begin{proposition}
+    Let $X$ be a topological space, $\mynet$ a net in and $\calF$ a filter on $X$. For $\mylimit \in X$ we have that
+    \begin{enumerate}
+        \item $\mylimit$ is a cluster point of $\calF$ iff $\calF$ has a superfilter converging to $\mylimit$,
+    \end{enumerate}
+    %
+    and equivalently that
+    %
+    \begin{enumerate}[resume]
+        \item $\mylimit$ is a cluster point of $\mynet$ iff $\mynet$ has a subnet converging to $\mylimit$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\begin{proofsec}
+    \item[(a)]
+    First assume that $\mylimit$ is a cluster point of $\calF$ and consider the collection of sets
+    %
+    \begin{equation*}
+        \calB
+            = \set{F \intersect N}{F \in \calF, N \in \nhoods{\mylimit}}
+            \neq \emptyset.
+    \end{equation*}
+    %
+    Notice that every element in $\calB$ is nonempty, and that
+    %
+    \begin{equation*}
+        (F_1 \intersect N_1) \intersect (F_2 \intersect N_2)
+            = (F_1 \intersect F_2) \intersect (N_1 \intersect N_2)
+            \in \calB,
+    \end{equation*}
+    %
+    so $\calB$ is a filter basis. Denote the filter it generates by $\calG$. This is a superfilter of $\calF$ since $X \in \nhoods{\mylimit}$, and we have $\nhoods{\mylimit} \subseteq \calG$ since $X \in \calF$, so $\calG \to \mylimit$.
+
+    Conversely assume that $\calF$ has a superfilter $\calG$ converging to $\mylimit$. This means that $\nhoods{\mylimit} \subseteq \calG$, so for all $F \in \calF$ and $N \in \nhoods{\mylimit}$ the intersection $F \intersect N$ lies in $\calG$ since $\calG$ is a filter, hence is nonempty.
+
+    \item[(b)]
+    Recall that $\mylimit$ is a cluster point $\mynet$ if and only if it is a cluster point of $\evfilt[\mynet]$, which by (a) is the case just when $\evfilt[\mynet]$ has a superfilter converging to $\mylimit$. But such a superfilter corresponds to a subnet of $\mynet$, and this converges if and only the superfilter does.
+\end{proofsec}
+\end{proof}
+
+
+\chapter{Ultrafilters and ultranets}
+
+% TODO decide on whether to use subordination or not
+
+\begin{definition}[Ultrafilters]
+    A filter $\calU$ on a set $X$ is said to be an \emph{ultrafilter} if it is a maximal element in $\filters{X}$, i.e. if $\calU \subseteq \calF$ implies that $\calU = \calF$ for any filter $\calF$ on $X$.
+\end{definition}
+
+
+\begin{proposition}
+    A filter $\calU$ on a set $X$ is an ultrafilter if and only if for every $A \subseteq X$ either $A \in \calU$ or $X \setminus A \in \calU$.
+\end{proposition}
+
+\begin{proof}
+    Assume that there is an $A \subseteq X$ such that neither $A$ nor $X \setminus A$ is an element of $\calU$. Notice that then $A \intersect U \neq \emptyset$ for all $U \in \calU$, since otherwise $U \subseteq X \setminus A$, and so we would have $X \setminus A \in \calU$. The set
+    %
+    \begin{equation*}
+        \calB
+            = \set{A \intersect U}{U \in \calU}
+    \end{equation*}
+    %
+    is then easily seen to be a filter basis. Let $\calF$ be the filter generated by $\calB$. Clearly $\calU \subseteq \calF$ since $A \intersect U \subseteq U$ for any $U \in \calU$. But since $X \in \calU$ we also have $A \in \calF$, so $\calF$ is strictly larger than $\calU$. Hence $\calU$ is not an ultrafilter.
+
+    Conversely let $\calF$ be a not necessarily proper filter on $X$ that is strictly greater than $\calU$, and let $A \in \calF \setminus \calU$. Then we must have $X \setminus A \in \calU$, so $\emptyset = A \intersect X \setminus A \in \calF$, and hence $\calF = \powerset{X}$.
+\end{proof}
+
+The corresponding notion for nets is usually defined as follows:
+
+\begin{definition}
+    A net $\mynet$ in a set $X$ is an \emph{ultranet} or \emph{universal net} if for every $A \subseteq X$, $\mynet$ is eventually in either $A$ or $X \setminus A$.
+\end{definition}
+%
+[TODO ref prop] thus shows that $\mynet$ is an ultranet if and only if $\evfilt[\mynet]$ is an ultrafilter.
+
+
+\begin{theorem}
+    Every filter is contained in an ultrafilter. Equivalently, every net has a universal subnet.
+\end{theorem}
+
+\begin{proof}
+    Let $\calF$ be a filter on a set $X$, and consider the set
+    %
+    \begin{equation*}
+        \mathbb{F}
+            = \set{\calG \in \filters{X}}{\calF \subseteq \calG}.
+    \end{equation*}
+    %
+    This is a nonempty partially ordered set. If $\mathbb{G}$ is a chain in $\mathbb{F}$, then it is easy to see that $\bigunion_{\calG \in \mathbb{G}} \calG \in \mathbb{F}$. Hence every chain in $\mathbb{F}$ is bounded, so Zorn's lemma yields a maximal element $\calU$. Clearly $\calU$ is an ultrafilter containing $\calF$ as desired.
+\end{proof}
+
+
+\chapter{Continuity}
+
+\begin{definition}
+    Let $f \colon X \to Y$ be a function, $\mynet \colon I \to X$ a net and $\calF$ a filter on $X$.
+    %
+    \begin{enumerate}
+        \item The \emph{pushforward of $\mynet$ by $f$} is the net $f(\mynet) = f \circ \mynet \colon I \to Y$.
+        \item The \emph{pushforward of $\calF$ by $f$} is the filter $f(\calF)$ generated by the filter basis $\set{f(F)}{F \in \calF}$.
+    \end{enumerate}
+\end{definition}
+
+\begin{remarkbreak}
+    \begin{enumerate}
+        \item If $\mynet \sim \altnet$ then also $f(\mynet) \sim f(\altnet)$. We therefore define the pushforward $f([\mynet])$ of the class $[\mynet]$ by the class $[f(\mynet)]$.
+        
+        \item If $\calB$ is a basis for the filter $\calF$, then consider the filter $f(\calB)$ generated by the filter basis $\set{f(B)}{B \in \calB}$. We claim that $f(\calB) = f(\calF)$. The inclusion \enquote{$\subseteq$} is clear, and if $G = f(F)$ for some $F \in \calF$, then $B \subseteq F$ for some $B \in \calB$. Hence $f(B) \subseteq G$, so $G \in f(\calB)$ since the latter is upward closed.
+        
+        \item We may give a different characterisation of the pushforward $f(\calF)$. Consider the set
+        %
+        \begin{equation*}
+            \calG
+                = \set{G \subseteq Y}{f\preim(G) \in \calF}.
+        \end{equation*}
+        %
+        This is easily seen to be a filter. We claim that $f(\calF) = \calG$. For all $F \in \calF$ we have $F \subseteq f\preim(f(F))$, so $f\preim(f(F)) \in \calF$, and hence $f(F) \in \calG$. It follows that $f(\calF) \subseteq \calG$.
+
+        Conversely, if $G \in \calG$ then $f(f\preim(G)) \subseteq G$. Since $f\preim(G) \in \calF$ we have $G \in f(\calF)$, so $\calG \subseteq f(\calF)$.
+    \end{enumerate}
+\end{remarkbreak}
+
+\begin{lemma}
+    Let $f \colon X \to Y$ be a function, and let $\mynet$ be a net in $X$. Then $f(\evfilt[\mynet]) = \evfilt[f(\mynet)]$. In particular $f(\evfilteq[{[u]}]) = \evfilteq[f({[u]})]$, so $\myinv[f(\calF)] = f(\myinv[\calF])$ for every filter $\calF$ on $X$.
+\end{lemma}
+
+\begin{proof}
+    Since the tails $\tails{\mynet}$ is a basis for $\evfilt[\mynet]$, the collection $\set{f(T)}{T \in \tails{\mynet}}$ is a basis for $f(\evfilt[\mynet])$. On the other hand, this is precisely $\tails{f(\mynet)}$, which is a basis for $\evfilt[f(\mynet)]$.
+\end{proof}
+
+
+\begin{corollary}
+    Let $f \colon X \to Y$ be a function, $\mynet$ a net in $X$, and $y \in Y$. Then $f(\mynet) \to y$ if and only if $f(\evfilt[\mynet]) \to y$.
+\end{corollary}
+
+\begin{proof}
+    This is immediate since $f(\evfilt[\mynet]) = \evfilt[f(\mynet)]$.
+\end{proof}
+
+
+\begin{proposition}
+    Let $f \colon X \to Y$ be a function between topological spaces, and let $x \in X$. Then the following are equivalent:
+    %
+    \begin{enumerate}
+        \item $f$ is continuous at $x$.
+        \item For all nets $\mynet$ in $X$, $\mynet \to x$ implies that $f(\mynet) \to f(x)$.
+        \item For all filters $\calF$ on $X$, $\calF \to x$ implies that $f(\calF) \to f(x)$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\begin{proofsec}
+    \item[(a) $\implies$ (b)]
+    For each $N \in \nhoods{f(x)}$ there is an $M \in \nhoods{x}$ such that $f(M) \subseteq N$. Since $\mynet$ is eventually in $M$, $f(\mynet) = f \circ \mynet$ is eventually in $f(M) \subseteq N$, showing that $f(\mynet) \to f(x)$. % TODO: or just use filters? What do I like best?
+
+    \item[(b) $\implies$ (c)]
+    This follows immediately from [TODO cor].
+
+    \item[(c) $\implies$ (a)]
+    Recall that $\nhoods{x}$ is a filter that converges to $x$. Hence $f(\nhoods{x}) \to f(x)$, which by definition means that $\nhoods{f(x)} \subseteq f(\nhoods{x})$. Each $N \in \nhoods{f(x)}$ thus contains an element of the basis of $f(\nhoods{x})$, namely a set on the form $f(M)$ for some $M \in \nhoods{x}$. Hence $f$ is continuous at $x$.
+\end{proofsec}
+\end{proof}
+
+
+\begin{proposition}
+    Let $\{X_\alpha\}_{\alpha \in A}$ be a family of topological spaces, and set $X = \bigprod_{\alpha \in A} X_\alpha$. Let $\mynet$ be a net in $X$, and let $\calF$ be a filter in $X$. Then we have for $x \in X$ that
+    %
+    \begin{enumerate}
+        \item $\calF \to x$ if and only if $\pi_\alpha(\calF) \to x_\alpha$ for all $\alpha \in A$, and that
+        \item $\mynet \to x$ if and only if $\pi_\alpha(\mynet) \to x_\alpha$ for all $\alpha \in A$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    We prove (a), and (b) is an immediate consequence. The \enquote{only if} part follows from [TODO].
+    
+    Conversely let $N \in \nhoods{x}$, and let $U \in \nhoods{x_\alpha}$ be such that $\pi_\alpha\preim(U) \subseteq N$ for some $\alpha \in A$. Since $\calF$ is a filter, to show that $N \in \calF$ it suffices to show that $\pi_\alpha\preim(U) \in \calF$. Since $\pi_\alpha(\calF) \to x_\alpha$ we have $U \in \pi_\alpha(\calF)$, and by [TODO ref remark] it follows that $\pi_\alpha\preim(U) \in \calF$. Hence $\calF \to x$ as desired.
+\end{proof}
+
+
+\begin{proposition}
+    Let $f \colon X \to Y$ be a function, $\mynet$ an ultranet in $X$ and $\calU$ an ultrafilter on $X$. Then
+    %
+    \begin{enumerate}
+        \item $f(\calU)$ is an ultrafilter on $Y$, and
+        \item $f(\mynet)$ is an ultranet on $Y$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    As usual, (b) follows immediately from (a). To prove (a) we use [TODO ref], so let $B \subseteq Y$. Then either $f\preim(B) \in \calU$ or $f\preim(Y \setminus B) = X \setminus f\preim(B) \in \calU$. By [TODO rem ref] either $B \in f(\calU)$ or $Y \setminus B \in f(\calU)$, so $f(\calU)$ is an ultrafilter.
+\end{proof}
+
+
+\chapter{Compactness}
+
+\newcommand{\calK}{\mathcal{K}}
+
+\begin{proposition}
+    Let $X$ be a topological space. The following are equivalent:
+    %
+    \begin{enumerate}
+        \item $X$ is compact.
+        \item Every filter on $X$ has a cluster point.
+        \item Every filter on $X$ has a convergent superfilter.
+        \item Every ultrafilter on $X$ converges.
+    \end{enumerate}
+    %
+    These are equivalent to the corresponding claims concerning nets:
+    \begin{enumerate}[resume]
+        \item Every net in $X$ has a cluster point.
+        \item Every net in $X$ has a convergent subnet.
+        \item Every ultranet in $X$ converges.
+    \end{enumerate}
+\end{proposition}
+%
+We will use the following well-known characterisation of compactness: The space $X$ is compact if and only if for every collection $\calK$ of closed subsets with the finite intersection property, $\bigintersect_{K \in \calK} K \neq \emptyset$.
+
+\begin{proof}
+\begin{proofsec}
+    \item[(a) $\implies$ (b)]
+    Let $\calF$ be a filter on $X$. Clearly $\calF$ itself has the finite intersection property, and so does the collection $\set{ \closure{F}}{F \in \calF}$. Hence $\bigintersect_{F \in \calF} \closure{F} \neq \emptyset$, so $\calF$ has a cluster point by [TODO ref].
+
+    \item[(b) $\implies$ (c)]
+    This is an immediate consequence of [TODO ref].
+
+    \item[(c) $\implies$ (d)]
+    If $\calU$ is an ultrafilter on $X$, then it has a convergent superfilter $\calF$. But since $\calU = \calF$, $\calU$ itself must be convergent.
+
+    \item[(d) $\implies$ (a)]
+    Assume that there is a collection $\calA$ of subsets of $X$ with the finite intersection property and with $\bigintersect_{A \in \calA} A = \emptyset$. The collection
+    %
+    \begin{equation*}
+        \calB
+            = \set[\bigg]{ \bigintersect_{i=1}^n A_i }{ n \in \ints_+, A_1, \ldots, A_n \in \calA }
+    \end{equation*}
+    %
+    is clearly a filter basis, so let $\calF$ be the filter it generates. By [TODO ref] $\calF$ is contained in an ultrafilter $\calU$. Now notice that
+    %
+    \begin{equation*}
+        \bigintersect_{B \in \calU} \closure{B}
+            \subseteq \bigintersect_{B \in \calB} \closure{B}
+            = \bigintersect_{B \in \calB} B
+            = \emptyset.
+    \end{equation*}
+    %
+    Thus $\calU$ has no cluster points, so it does not converge.
+\end{proofsec}
+\end{proof}
+
+
+\begin{theorem}[Tychonoff's theorem]
+    Let $\{X_\alpha\}_{\alpha \in A}$ be a collection of compact topological spaces. Then the product $\bigprod_{\alpha \in A} X_\alpha$ is also compact.
+\end{theorem}
+
+\begin{proof}
+    Let $\calU$ be an ultrafilter in $X = \bigprod_{\alpha \in A} X_\alpha$. For all $\alpha \in A$, $\pi_\alpha(\calU)$ is an ultrafilter in $X_\alpha$ by [TODO ref], so since $X_\alpha$ is compact [TODO ref] implies that $\pi_\alpha(\calU)$ converges. [TODO ref] in turn implies that $\calU$ converges, so another application of [TODO ref] yields compactness of $X$.
+\end{proof}
+
+
+\nocite{*}
+
+\printbibliography
+
+\end{document}
