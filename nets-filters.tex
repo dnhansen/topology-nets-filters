@@ -491,7 +491,7 @@ In the theory of filters, the concept corresponding to subnets is that of \emph{
 %
 We sometimes also say that $\calF$ is a \emph{subfilter} of $\calG$, or that $\calF$ is \emph{finer} than $\calG$ and $\calG$ \emph{courser} than $\calF$. The class of filters on a fixed set is of course partially ordered by inclusion.
 
-Notice that if $\calF \to \mylimit$ and $\calG$ is a superfilter of $\calF$, then also $\calG \to \mylimit$ as we would expect if superfilters are to play the role of subnets.
+Notice that if $\calF \to \mylimit$ and $\calG$ is a superfilter of $\calF$, then also $\calG \to \mylimit$ as we would expect if superfilters are to play the role of subnets. In other words, $\calF \to x$ if and only if $\calF$ is a superfilter of $\nhoods{x}$.
 
 
 \chapter{Correspondence between nets and filters}
@@ -743,7 +743,7 @@ The corresponding notion for nets is usually defined as follows:
 
 \begin{proposition}
     \label{thm:continuity-filter-net}
-    Let $f \colon X \to Y$ be a function between topological spaces, and let $x \in X$. Then $f$ is continuous at $x$ if and only if $\nhoods{f(x)} \subseteq f(\nhoods{x})$. In particular, the following are equivalent:
+    Let $f \colon X \to Y$ be a function between topological spaces, and let $x \in X$. Then $f$ is continuous at $x$ if and only if $\nhoods{f(x)} \subseteq f(\nhoods{x})$, i.e. if $f(\nhoods{x}) \to f(x)$. In particular, the following are equivalent:
     %
     \begin{enumprop}
         \item \label{enum:continuity-point} $f$ is continuous at $x$.
@@ -771,21 +771,33 @@ The corresponding notion for nets is usually defined as follows:
     This follows immediately from \cref{thm:filter-net-convergence}
 \end{proofsec}
 \end{proof}
+%
+The first part of the proposition implies that
+%
+\begin{equation*}
+    \nhoods{x} \to x
+    \quad \implies \quad
+    f(\nhoods{x}) \to f(x)
+\end{equation*}
+%
+whenever $f$ is continuous at $x$ (the antecedent is of course always true, so this implication is true just when the consequent is). The content of the implication \subcref{enum:continuity-point} $\implies$ \subcref{enum:filter-convergence-point} above is that we may replace $\nhoods{x}$ by any filter whatsoever.
 
 
 \begin{proposition}
-    Let $\{X_\alpha\}_{\alpha \in A}$ be a family of topological spaces, and set $X = \bigprod_{\alpha \in A} X_\alpha$. Let $\mynet$ be a net in $X$, and let $\calF$ be a filter on $X$. Then we have for $x \in X$ that
+    Let $A$ be an index set, and let $X$ be a topological space equipped with the initial topology induced by a family of maps $f_\alpha \colon X \to X_\alpha$ for $\alpha \in A$. Let $\mynet$ be a net in $X$, and let $\calF$ be a filter on $X$. Then we have for $x \in X$ that
     %
     \begin{enumprop}
-        \item \label{enum:product-filter-convergence} $\calF \to x$ if and only if $\pi_\alpha(\calF) \to x_\alpha$ for all $\alpha \in A$, and that
-        \item \label{enum:product-net-convergence} $\mynet \to x$ if and only if $\pi_\alpha(\mynet) \to x_\alpha$ for all $\alpha \in A$.
+        \item \label{enum:initial-top-filter-convergence} $\calF \to x$ if and only if $f_\alpha(\calF) \to x_\alpha$ for all $\alpha \in A$, and that
+        \item \label{enum:initial-top-net-convergence} $\mynet \to x$ if and only if $f_\alpha(\mynet) \to x_\alpha$ for all $\alpha \in A$.
     \end{enumprop}
 \end{proposition}
+%
+In particular we see that the product topology is indeed the topology of pointwise convergence, and that convergence in subspaces is the same as convergence in a larger space.
 
 \begin{proof}
-    We prove \subcref{enum:product-filter-convergence}, and \subcref{enum:product-net-convergence} is an immediate consequence. The \enquote{only if} part follows from \cref{thm:continuity-filter-net} since each $\pi_\alpha$ is continuous.
+    We prove \subcref{enum:initial-top-filter-convergence}, and \subcref{enum:initial-top-net-convergence} is an immediate consequence. The \enquote{only if} part follows from \cref{thm:continuity-filter-net} since each $\pi_\alpha$ is continuous.
     
-    Conversely let $N \in \nhoods{x}$, and let $U \in \nhoods{x_\alpha}$ be such that $\pi_\alpha\preim(U) \subseteq N$ for some $\alpha \in A$. Since $\calF$ is a filter, to show that $N \in \calF$ it suffices to show that $\pi_\alpha\preim(U) \in \calF$. Since $\pi_\alpha(\calF) \to x_\alpha$ we have $U \in \pi_\alpha(\calF)$, and by \cref{enum:pushforward-filter-equivalent} it follows that $\pi_\alpha\preim(U) \in \calF$. Hence $\calF \to x$ as desired.
+    Conversely let $N \in \nhoods{x}$, and note that $N$ is a union of elements on the form $\bigintersect_{\alpha \in A_0} f_\alpha\preim(U_\alpha)$, where $A_0 \subseteq A$ is finite, and $U_\alpha$ is a neighbourhood of $f_\alpha(x)$. Since $\calF$ is a filter, it suffices to show that each set on the form $f_\alpha\preim(U_\alpha)$ is an element of $\calF$. Since $f_\alpha(\calF) \to x_\alpha$ we have $U_\alpha \in f_\alpha(\calF)$, and by \cref{enum:pushforward-filter-equivalent} it follows that $f_\alpha\preim(U_\alpha) \in \calF$. Hence $\calF \to x$ as desired.
 \end{proof}
 
 
@@ -838,7 +850,7 @@ We will use the following well-known characterisation of compactness: The space 
     This is an immediate consequence of \cref{enum:superfilter-cluster}.
 
     \item[\subcref{enum:every-filter-convergent-superfilter} $\implies$ \subcref{enum:every-ultrafilter-converges}]
-    If $\calU$ is an ultrafilter on $X$, then it has a convergent superfilter $\calF$. But since $\calU = \calF$, $\calU$ itself must be convergent.
+    Let $\calU$ be an ultrafilter on $X$. Then it has a convergent superfilter $\calF$, but since $\calU = \calF$, $\calU$ itself must be convergent.
 
     \item[\subcref{enum:every-ultrafilter-converges} $\implies$ \subcref{enum:space-compact}]
     Assume that there is a collection $\calA$ of closed subsets of $X$ with the finite intersection property and with $\bigintersect_{A \in \calA} A = \emptyset$. The collection
@@ -868,7 +880,7 @@ We will use the following well-known characterisation of compactness: The space 
 \end{theorem}
 
 \begin{proof}
-    Let $\calU$ be an ultrafilter in $X = \bigprod_{\alpha \in A} X_\alpha$. For all $\alpha \in A$, $\pi_\alpha(\calU)$ is an ultrafilter in $X_\alpha$ by \cref{enum:ultrafilter-pushforward}, so since $X_\alpha$ is compact \cref{thm:compactness-equivalent} implies that $\pi_\alpha(\calU)$ converges. \cref{enum:product-filter-convergence} in turn implies that $\calU$ converges, so another application of \cref{thm:compactness-equivalent} yields compactness of $X$.
+    Let $\calU$ be an ultrafilter in $X = \bigprod_{\alpha \in A} X_\alpha$. For all $\alpha \in A$, $\pi_\alpha(\calU)$ is an ultrafilter in $X_\alpha$ by \cref{enum:ultrafilter-pushforward}, so since $X_\alpha$ is compact \cref{thm:compactness-equivalent} implies that $\pi_\alpha(\calU)$ converges. \cref{enum:initial-top-filter-convergence} in turn implies that $\calU$ converges, so another application of \cref{thm:compactness-equivalent} yields compactness of $X$.
 \end{proof}
 
 
