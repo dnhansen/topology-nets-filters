@@ -267,11 +267,11 @@ Notice that $\tails{\mynet}$ is downward directed with respect to set inclusion:
 \begin{definition}
     Let $\mynet \colon I \to X$ be a net, and let $A \subseteq X$.
     %
-    \begin{enumerate}
+    \begin{enumdef}
         \item The net $\mynet$ is \emph{eventually in $A$} if there exists a tail $T \in \tails{\mynet}$ such that $T \subseteq A$. Equivalently, there exists an $i \in I$ such that $\mynet_j \in A$ for all $j \geq i$.
 
         \item The net $\mynet$ is \emph{frequently/cofinally in $A$} if $T \intersect A \neq \emptyset$ for all $T \in \tails{\mynet}$. Equivalently, for all $i \in I$ there exists a $j \geq i$ such that $\mynet_j \in E$, i.e. $\mynet\preim(A)$ is cofinal in $I$.
-    \end{enumerate}
+    \end{enumdef}
 \end{definition}
 %
 In particular, since $\tails{\mynet}$ is downward directed, if $\mynet$ is eventually in $A$ then it is frequently in $A$. Notice also that $\mynet$ is \emph{not} eventually in $A$ if and only if it is frequently in $X \setminus A$.
@@ -279,7 +279,7 @@ In particular, since $\tails{\mynet}$ is downward directed, if $\mynet$ is event
 \begin{definition}
     Let $\mynet \colon I \to X$ be a net in a topological space $X$, and let $\mylimit \in X$.
     %
-    \begin{enumerate}
+    \begin{enumdef}
         \item The net $\mynet$ \emph{converges to $\mylimit$} if $\mynet$ is eventually in $N$ for all $N \in \nhoods{\mylimit}$, i.e. if
         %
         \begin{equation*}
@@ -300,7 +300,7 @@ In particular, since $\tails{\mynet}$ is downward directed, if $\mynet$ is event
         \begin{equation*}
             \forall N \in \nhoods{\mylimit}, T \in \tails{\mynet} \colon T \intersect N \neq \emptyset.
         \end{equation*}
-    \end{enumerate}
+    \end{enumdef}
 \end{definition}
 %
 Thus if $\mynet \to \mylimit$, then $\mylimit$ is a cluster point of $\mynet$.
@@ -311,8 +311,8 @@ Next we consider \emph{subnets}. There are at least three different, non-equival
     \label{def:subnets}
     Let $\mynet \colon I \to X$ and $\subnet \colon J \to X$ be nets in a set $X$.
     
-    \begin{enumerate}
-        \item We say that $\subnet$ is a \emph{(Aarnes--Andenæs) subnet} of $\mynet$ if for all $A \subseteq X$,
+    \begin{enumdef}
+        \item \label{enum:AA-subnet} We say that $\subnet$ is a \emph{(Aarnes--Andenæs) subnet} of $\mynet$ if for all $A \subseteq X$,
         %
         \begin{equation*}
             \text{$\mynet$ is eventually in $A$}
@@ -328,27 +328,27 @@ Next we consider \emph{subnets}. There are at least three different, non-equival
             \text{$\mynet$ is frequently in $A$}.
         \end{equation*}
 
-        \item We say that $\subnet$ is a \emph{Kelley subnet} of $\mynet$ if there exists a function $\phi \colon J \to I$ such that
+        \item \label{enum:Kelley-subnet} We say that $\subnet$ is a \emph{Kelley subnet} of $\mynet$ if there exists a function $\phi \colon J \to I$ such that
         %
         \begin{enumerate}
             \item $\subnet = \mynet \circ \phi$, and
             \item for each $i_0 \in I$ there is a $j_0 \in J$ such that $j \geq j_0$ implies that $\phi(j) \geq i_0$.
         \end{enumerate}
 
-        \item We say that $\subnet$ is a \emph{Willard subnet} of $\mynet$ if there exists a function $\phi \colon J \to I$ such that
+        \item \label{enum:Willard-subnet} We say that $\subnet$ is a \emph{Willard subnet} of $\mynet$ if there exists a function $\phi \colon J \to I$ such that
         %
         \begin{enumerate}
             \item $\subnet = \mynet \circ \phi$,
             \item $\phi$ is monotone, and
             \item $\phi$ is cofinal, i.e. for each $i_0 \in I$ there is a $j_0 \in J$ such that $\phi(j_0) \geq i_0$.
         \end{enumerate}
-    \end{enumerate}
+    \end{enumdef}
 \end{definition}
 %
 It will turn out that Aarnes--Andenæs subnets (henceforth simply \enquote{AA subnets}) will be most important to us. We may equip the class of nets in a set $X$ with a preorder by letting $\subnet \leq \mynet$ if $\subnet$ is an AA subnet of $\mynet$. If both $\subnet \leq \mynet$ and $\mynet \leq \subnet$, then we say that $\mynet$ and $\subnet$ are \emph{equivalent} and write $\mynet \sim \subnet$. As with sequences, if $\mynet \to \mylimit$ and $\subnet$ is a subnet (of any kind) of $\mynet$, then also $\subnet \to \mylimit$. This is clear for AA subnets, and will follow for the other two kinds from the following remark:
 
 \begin{remarkbreak}[Relationship between definitions of subnets]
-    We claim that each Willard subnet is a Kelley subnet, and each Kelley subnet is an AA subnet. For the first claim, let $i_0 \in I$ and choose $j_0$ in accordance with [ref?]. For $j \in J$ with $j \geq j_0$ we thus have
+    We claim that each Willard subnet is a Kelley subnet, and each Kelley subnet is an AA subnet. For the first claim, let $i_0 \in I$ and choose $j_0$ in accordance with \cref{enum:Willard-subnet}. For $j \in J$ with $j \geq j_0$ we thus have
     %
     \begin{equation*}
         \phi(j)
@@ -360,16 +360,20 @@ It will turn out that Aarnes--Andenæs subnets (henceforth simply \enquote{AA su
 
     Next assume that $\subnet$ is a Kelley subnet of $\mynet$, assume that $\subnet$ is frequently in some $A \subseteq X$, and let $i_0 \in I$. Choose $j_0 \in J$ such that $j \geq j_0$ implies $\phi(j) \geq i_0$. There is some $j \in J$ such that $\mynet_{\phi(j)} = \subnet_j \in A$. Hence $\mynet$ is frequently in $A$, so $\subnet$ is an AA subnet.
 
-    [TODO: converses don't hold, see Schachter.]
+    The converses do not hold. For counterexamples see \textcite[§7.16]{schechter1997} % TODO add counterexamples?
 \end{remarkbreak}
 
 \begin{lemma}
-    Let $\mynet \colon I \to X$ and $\altnet \colon J \to X$ be nets in a set $X$ with the property that $T_1 \intersect T_2 \neq \emptyset$ for all $T_1 \in \tails{\mynet}$ and $\tails{\altnet}$. Then $\mynet$ and $\altnet$ have a common Willard subnet $\newnet$.
+    \label{thm:Willard-subnet}
+    Let $\mynet \colon I \to X$ and $\altnet \colon J \to X$ be nets in a set $X$ with the property that $T_1 \intersect T_2 \neq \emptyset$ for all $T_1 \in \tails{\mynet}$ and $T_2 \in \tails{\altnet}$. Then $\mynet$ and $\altnet$ have a common Willard subnet $\newnet$.
 
     Furthermore, $\newnet$ can be chosen to be maximal among common AA subnets of $\mynet$ and $\altnet$: That is, any common AA subnet of $\mynet$ and $\altnet$ is also an AA subnet of $\newnet$.
 \end{lemma}
 %
-We have stated the lemma in terms of two nets, but the proof generalises in an obvious way to any finite number of nets.
+We have stated the lemma in terms of two nets, but the proof generalises in an obvious way to any finite number of nets. We shall not use this lemma nor the following corollary in the sequel, so we allow ourselves to use the theory of filters in the proof below.
+
+\newcommand{\evfilt}[1][]{\calE_{#1}}
+\newcommand{\evfilteq}[1][]{\tilde{\calE}_{#1}}
 
 \begin{proof}
     For $i_0 \in I$ and $j_0 \in J$, notice that
@@ -387,7 +391,7 @@ We have stated the lemma in terms of two nets, but the proof generalises in an o
             = \set{(i,j) \in I \prod J}{\mynet_i = \altnet_j}
     \end{equation*}
     %
-    is nonempty, and if $I \prod J$ is equipped with the product order, it is easy to see that $K$ is directed. Define a net $\newnet \colon K \to X$ by defining $\newnet_{(i,j)}$ as the common value $\mynet_i = \altnet_j$. Then $\newnet = \mynet \circ \pi_1|_K$, where $\pi_1 \colon I \prod J \to I$ is the projection onto $I$. This trivially satisfies the conditions in [TODO Willard subnet ref], showing that $\newnet$ is a Willard subnet of both $\mynet$ and $\altnet$.
+    is nonempty, and if $I \prod J$ is equipped with the product order, it is easy to see that $K$ is directed. Define a net $\newnet \colon K \to X$ by defining $\newnet_{(i,j)}$ as the common value $\mynet_i = \altnet_j$. Then $\newnet = \mynet \circ \pi_1|_K$, where $\pi_1 \colon I \prod J \to I$ is the projection onto $I$. This trivially satisfies the conditions in \cref{enum:Willard-subnet}, showing that $\newnet$ is a Willard subnet of both $\mynet$ and $\altnet$.
     
     It is also easy to see that
     %
@@ -396,7 +400,15 @@ We have stated the lemma in terms of two nets, but the proof generalises in an o
             = \tail[\mynet]{i} \intersect \tail[\altnet]{j}
     \end{equation*}
     %
-    for all $(i,j) \in K$. [TODO] The theory of filters then shows that $\newnet$ is maximal as claimed.
+    for all $(i,j) \in K$. Hence
+    %
+    \begin{equation*}
+        \evfilt[w]
+            = \set{T_1 \intersect T_2}{T_1 \in \tails{u}, T_2 \in \tails{v}}
+            = \set{F_1 \intersect F_2}{F_1 \in \evfilt[u], F_2 \in \evfilt[v]},
+    \end{equation*}
+    %
+    so $\evfilt[w]$ is the minimal common superfilter of $\evfilt[u]$ and $\evfilt[v]$ It follows by \cref{thm:subnet-superfilter-correspondence} that $\newnet$ is maximal as claimed.
 \end{proof}
 
 
@@ -405,7 +417,7 @@ We have stated the lemma in terms of two nets, but the proof generalises in an o
 \end{corollary}
 
 \begin{proof}
-    Notice that $\mynet$ and $\subnet$ have a common AA subnet, namely $\subnet$. But [TODO ref] yields a maximal common Willard subnet $\newnet$, and by maximality $\subnet$ is also a subnet of $\newnet$. Hence these are equivalent as claimed.
+    Notice that $\mynet$ and $\subnet$ have a common AA subnet, namely $\subnet$. But \cref{thm:Willard-subnet} yields a maximal common Willard subnet $\newnet$, and by maximality $\subnet$ is also a subnet of $\newnet$. Hence these are equivalent as claimed.
 \end{proof}
 %
 Thus the three types of subnets can be used interchangably, insofar as the properties of a subnet are invariant up to equivalence. We will use AA subnets since their correspondence with superfilters is nicer, and henceforth \enquote{subnet} will mean AA subnet.
@@ -415,52 +427,61 @@ Thus the three types of subnets can be used interchangably, insofar as the prope
 \chapter{Basic theory of filters}
 
 \begin{definition}[Filters]
-    Let $X$ be a set. A \emph{filter on $X$} is a proper filter $\calF$ on the powerset $\powerset{X}$ ordered by inclusion. That is, $\calF$ is a nonempty collection of subsets of $X$ that is
+    Let $X$ be a set. A \emph{filter on $X$} is a proper filter $\calF$ in the powerset $\powerset{X}$ ordered by inclusion. That is, $\calF$ is a nonempty collection of subsets of $X$ that is
     %
-    \begin{enumerate}
-        \item proper, i.e. $\emptyset \not\in \calF$,
-        \item downward directed, i.e., for $F_1, F_2 \in \calF$ there is an $F_3 \in \calF$ such that $F_3 \subseteq F_1, F_2$, and
-        \item upward closed, i.e. $\calF = \calF^\uparrow$.
-    \end{enumerate}
+    \begin{enumdef}
+        \item \label{enum:filter-def-proper} proper, i.e. $\emptyset \not\in \calF$,
+        \item \label{enum:filter-def-directed} downward directed, i.e., for $F_1, F_2 \in \calF$ there is an $F_3 \in \calF$ such that $F_3 \subseteq F_1, F_2$, and
+        \item \label{enum:filter-def-closed} upward closed, i.e. $\calF = \calF^\uparrow$.
+    \end{enumdef}
 \end{definition}
 %
-The condition (c) means that if $F \in F$ and $F \subseteq G$, then $G \in \calF$. By [TODO remark ref], in the presence of (c) condition (b) [TODO links] is equivalent to $\calF$ being closed under (binary) intersections.
+The condition \subcref{enum:filter-def-closed} means that if $F \in F$ and $F \subseteq G$, then $G \in \calF$. In the presence of \subcref{enum:filter-def-closed}, condition \subcref{enum:filter-def-directed} is equivalent to $\calF$ being closed under (binary) intersections.
 
-We want a way to generate filters from less restrictive collections of sets. \Textcite[Exercise~2.22]{daveypriestley2002} gives a general way to do this, and we notice that if $\emptyset \neq \calB \subseteq \powerset{X}$ is already downward directed, then the filter generated by $\calB$ is just $\calB^\uparrow$. In fact, it is trivial to show that (in a general lattice) $\calB$ is downward directed if and only if $\calB^\uparrow$ is, so $\calB^\uparrow$ is a (not necessarily proper) filter if and only if $\calB$ is downward directed. If we further require that $\calB$ not contain the empty set, then $\calB^\uparrow$ is a filter in the above sense. This motivates the following definition:
+We want a way to generate filters from less restrictive collections of sets. \textcite[Exercise~2.22]{daveypriestley2002} gives a general way to do this, and we notice that if $\emptyset \neq \calB \subseteq \powerset{X}$ is already downward directed, then the filter generated by $\calB$ is just $\calB^\uparrow$. In fact, it is trivial to show that (in a general lattice) $\calB$ is downward directed if and only if $\calB^\uparrow$ is, so $\calB^\uparrow$ is a (not necessarily proper) filter if and only if $\calB$ is downward directed. If we further require that $\calB$ not contain the empty set, then $\calB^\uparrow$ is a filter in the above sense. This motivates the following definition:
 
 \begin{definition}[Filter bases]
     Let $X$ be a set. A \emph{filter basis on $X$} is a nonempty collection $\calB$ of subsets of $X$ that is
     %
-    \begin{enumerate}
+    \begin{enumdef}
         \item proper, and
         \item downward directed.
-    \end{enumerate}
+    \end{enumdef}
     %
     The filter \emph{generated by $\calB$} is the filter $\calB^\uparrow$. If $\calF$ is a filter on $X$ and $\calF = \calB^\uparrow$, then $\calB$ is called a \emph{basis} for $\calF$.
 \end{definition}
 
-If $X$ is a topological space and $\mylimit \in X$, then we denote the family of neighbourhoods of $\mylimit$ by $\nhoods{\mylimit}$. Notice that this is a filter on $X$.
+If $X$ is a topological space and $\mylimit \in X$, then we denote the family of neighbourhoods of $\mylimit$ by $\nhoods{\mylimit}$. Notice that this is a filter on $X$, so we call it the \emph{neighbourhood filter} of $x$.
 
 \begin{definition}
     Let $\calF$ be a filter on a topological space $X$, and let $\mylimit \in X$.
     %
-    \begin{enumerate}
+    \begin{enumdef}
         \item The filter $\calF$ \emph{converges to $\mylimit$} if $\nhoods{\mylimit} \subseteq \calF$. In this case we write $\calF \to \mylimit$.
         
-        \item The point $\mylimit$ is called a \emph{cluster point} of $\calF$ if
+        \item \label{enum:filter-cluster} The point $\mylimit$ is called a \emph{cluster point} of $\calF$ if
         %
         \begin{equation*}
             \forall N \in \nhoods{\mylimit}, F \in \calF \colon F \intersect N \neq \emptyset.
         \end{equation*}
-    \end{enumerate}
+    \end{enumdef}
 \end{definition}
 %
 Thus if $\calF \to \mylimit$, then $\mylimit$ is a cluster point of $\calF$. Notice the similarity between the definition of cluster points for nets and filters respectively.
 
-\begin{remark}
-    \label{rem:filter-cluster-points}
-    Notice also that if $\calB$ is a basis for the filter $\calF$ and $\nhoods{\mylimit} \subseteq \calB$, then $\calF \to \mylimit$. Furthermore, for every $F \in \calF$ there is a $B \in \calB$ with $B \subseteq F$. So if $B \intersect N \neq \emptyset$ then also $F \intersect N \neq \emptyset$. Hence we may also replace $\calF$ with $\calB$ in (b) [TODO ref].
-\end{remark}
+\begin{remarkbreak}
+    \begin{enumrem}
+        \item \label{enum:filter-cluster-points} Notice also that if $\calB$ is a basis for the filter $\calF$ and $\nhoods{\mylimit} \subseteq \calB$, then $\calF \to \mylimit$. Furthermore, for every $F \in \calF$ there is a $B \in \calB$ with $B \subseteq F$. So if $B \intersect N \neq \emptyset$ then also $F \intersect N \neq \emptyset$. Hence we may also replace $\calF$ with $\calB$ in \subcref{enum:filter-cluster}.
+        
+        \item \label{enum:filter-cluster-equivalent} The set of cluster points of $\calF$ is given by
+        %
+        \begin{equation*}
+            \bigintersect_{F \in \calF} \closure{F},
+        \end{equation*}
+        %
+        since $x$ is a cluster point of $\calF$ if and only if every neighbourhood of $x$ intersects every $F \in \calF$.
+    \end{enumrem}
+\end{remarkbreak}
 
 In the theory of filters, the concept corresponding to subnets is that of \emph{superfilters}:
 
@@ -481,13 +502,11 @@ Notice that if $\calF \to \mylimit$ and $\calG$ is a superfilter of $\calF$, the
 \newcommand{\nets}[1]{\mathfrak{N}(#1)}
 \newcommand{\netseq}[1]{\tilde{\mathfrak{N}}(#1)}
 
-\newcommand{\evfilt}[1][]{\Phi_{#1}}
-\newcommand{\evfilteq}[1][]{\tilde{\Phi}_{#1}}
 \newcommand{\subord}{\vdash}
 
 We wish to study the correspondence between nets and filters on a fixed set $X$. Given a net $\mynet$ in $X$, recall that the collection $\tails{\mynet}$ of tails of $\mynet$ is downward directed, so $(\tails{\mynet})^\uparrow$ is indeed a filter, namely the smallest filter containing all tails of $\mynet$. We call this the \emph{eventuality filter} of $\mynet$ and denote it by $\evfilt[\mynet]$. This defines a map $\evfilt \colon \nets{X} \to \filters{X}$ given by $\evfilt(\mynet) = \evfilt[\mynet]$.
 
-Furthermore, we define an ordering $\subord$ on the set of filters by letting $\calG \subord \calF$ if $\calF \subseteq \calG$ (i.e. $\subord$ is dual to set inclusion), and in this case we say that $\calG$ is \emph{subordinate} to $\calF$.
+Since superfilters correspond to subnets, some authors define an ordering $\subord$ on the set of filters by letting $\calG \subord \calF$ if $\calF \subseteq \calG$ (i.e. $\subord$ is dual to set inclusion). In this case we say that $\calG$ is \emph{subordinate} to $\calF$. We will not use this language in the sequel, so $\filters{X}$ is ordered by inclusion.
 
 \begin{lemma}
     Let $\calF$ be a filter on a set $X$. There exists a net $\mynet$ in $X$ such that $\calF = \tails{\mynet}$. In particular $\calF = \evfilt[\mynet]$, so the map $\evfilt$ is surjective.
@@ -523,53 +542,54 @@ Furthermore, we define an ordering $\subord$ on the set of filters by letting $\
 \end{proof}
 
 \begin{theorem}
+    \label{thm:subnet-superfilter-correspondence}
     Let $\mynet$ and $\subnet$ be nets in a set $X$. For $F \subseteq X$ we have
     %
-    \begin{enumerate}
-        \item $F \in \evfilt[\mynet]$ if and only if $\mynet$ is eventually in $F$, and
-        \item $\subnet \leq \mynet$ if and only if $\evfilt[\subnet] \subord \evfilt[\mynet]$.
-    \end{enumerate}
+    \begin{enumthm}
+        \item \label{enum:net-filter-eventuality} $F \in \evfilt[\mynet]$ if and only if $\mynet$ is eventually in $F$, and
+        \item \label{enum:net-filter-ordering} $\subnet \leq \mynet$ if and only if $\evfilt[\mynet] \subseteq \evfilt[\subnet]$.
+    \end{enumthm}
     %
-    In particular, the map $\evfilt \colon (\nets{X}, \leq) \to (\filters{X}, \subord)$ is monotone.
+    In particular, the map $\evfilt \colon (\nets{X}, \leq) \to (\filters{X}, \subseteq)$ is decreasing.
 \end{theorem}
 
 \begin{proof}
 \begin{proofsec}
-    \item[(a)]
+    \item[\subcref{enum:net-filter-eventuality}]
     We have $F \in \evfilt[\mynet] = (\tails{\mynet})^\uparrow$ if and only if $F$ contains a tail $T$ of $\mynet$, and this is the case if and only if $\mynet$ is eventually in $F$.
 
-    \item[(b)]
-    The filter $\evfilt[\mynet]$ contains those subsets $F \subseteq X$ such that $\mynet$ is eventually in $F$, so this follows immediately from (a).
+    \item[\subcref{enum:net-filter-ordering}]
+    The filter $\evfilt[\mynet]$ contains those subsets $F \subseteq X$ such that $\mynet$ is eventually in $F$, so this follows immediately from \subcref{enum:net-filter-eventuality}.
 \end{proofsec}
 \end{proof}
 
-\newcommand{\myinv}[1][]{\tilde{\Psi}_{#1}}
+\newcommand{\myinv}[1][]{\tilde{\mathfrak{n}}_{#1}}
 
-This motivates the following construction: If $\mynet$ is a net in $X$, denote by $[\mynet]$ the $\sim$-equivalence class of $\mynet$. [TODO ref theorem] then says that the map $\evfilt$ induces a map $\evfilteq \colon \netseq{X} \to \filters{X}$ which sends a class $[\mynet]$ to $\evfilt[\mynet]$, and that this map is injective. It inherits surjectivity from $\evfilt$, so it is in fact a bijection, hence an order isomorphism. We denote its inverse by $\myinv$.
+This motivates the following construction: If $\mynet$ is a net in $X$, denote by $[\mynet]$ the $\sim$-equivalence class of $\mynet$. \cref{thm:subnet-superfilter-correspondence} then says that the map $\evfilt$ induces a map $\evfilteq \colon \netseq{X} \to \filters{X}$ which sends a class $[\mynet]$ to $\evfilt[\mynet]$, and that this map is injective. It inherits surjectivity from $\evfilt$, so it is in fact a bijection, hence an order antiisomorphism. We denote its inverse by $\myinv$ and write $\myinv(\calF) = \myinv[\calF]$.
 
 
 \begin{corollary}
     Let $\mynet$ be a net in a topological space $X$, and let $\mylimit \in X$. We then have that
     %
-    \begin{enumerate}
-        \item $\mynet \to \mylimit$ if and only if $\evfilt[\mynet] \to \mylimit$, and
-        \item $\mylimit$ is a cluster point of $\mynet$ iff it is a cluster point of $\evfilt[\mynet]$.
-    \end{enumerate}
+    \begin{enumcor}
+        \item \label{enum:net-filter-convergence} $\mynet \to \mylimit$ if and only if $\evfilt[\mynet] \to \mylimit$, and
+        \item \label{enum:net-filter-cluster} $\mylimit$ is a cluster point of $\mynet$ iff it is a cluster point of $\evfilt[\mynet]$.
+    \end{enumcor}
 \end{corollary}
 
 \begin{proof}
     \begin{proofsec}
-        \item[(a)]
-        Apply [theorem] to each neighbourhood in $\nhoods{\mylimit}$.
+        \item[\subcref{enum:net-filter-convergence}]
+        Apply \cref{enum:net-filter-eventuality} to each neighbourhood in $\nhoods{\mylimit}$.
 
-        \item[(b)]
+        \item[\subcref{enum:net-filter-cluster}]
         Notice that $\mylimit$ is a cluster point of $\mynet$ if and only if
         %
         \begin{equation*}
             \forall N \in \nhoods{\mylimit}, T \in \tails{\mynet} \colon N \intersect T \neq \emptyset.
         \end{equation*}
         %
-        Since $\tails{\mynet}$ is a basis for $\evfilt[\mynet]$, by \cref{rem:filter-cluster-points} the above holds if and only if $\mylimit$ is a cluster point of $\evfilt[\mynet]$.
+        Since $\tails{\mynet}$ is a basis for $\evfilt[\mynet]$, by \cref{enum:filter-cluster-points} the above holds if and only if $\mylimit$ is a cluster point of $\evfilt[\mynet]$.
     \end{proofsec}
 \end{proof}
 
@@ -580,20 +600,20 @@ Next we see that cluster points can be characterised in terms of subnets and sup
 
 \begin{proposition}
     Let $X$ be a topological space, $\mynet$ a net in and $\calF$ a filter on $X$. For $\mylimit \in X$ we have that
-    \begin{enumerate}
-        \item $\mylimit$ is a cluster point of $\calF$ iff $\calF$ has a superfilter converging to $\mylimit$,
-    \end{enumerate}
+    \begin{enumprop}
+        \item \label{enum:superfilter-cluster} $\mylimit$ is a cluster point of $\calF$ iff $\calF$ has a superfilter converging to $\mylimit$,
+    \end{enumprop}
     %
     and equivalently that
     %
-    \begin{enumerate}[resume]
-        \item $\mylimit$ is a cluster point of $\mynet$ iff $\mynet$ has a subnet converging to $\mylimit$.
-    \end{enumerate}
+    \begin{enumprop}[resume]
+        \item \label{enum:subnet-cluster} $\mylimit$ is a cluster point of $\mynet$ iff $\mynet$ has a subnet converging to $\mylimit$.
+    \end{enumprop}
 \end{proposition}
 
 \begin{proof}
 \begin{proofsec}
-    \item[(a)]
+    \item[\subcref{enum:superfilter-cluster}]
     First assume that $\mylimit$ is a cluster point of $\calF$ and consider the collection of sets
     %
     \begin{equation*}
@@ -614,22 +634,22 @@ Next we see that cluster points can be characterised in terms of subnets and sup
 
     Conversely assume that $\calF$ has a superfilter $\calG$ converging to $\mylimit$. This means that $\nhoods{\mylimit} \subseteq \calG$, so for all $F \in \calF$ and $N \in \nhoods{\mylimit}$ the intersection $F \intersect N$ lies in $\calG$ since $\calG$ is a filter, hence is nonempty.
 
-    \item[(b)]
-    Recall that $\mylimit$ is a cluster point $\mynet$ if and only if it is a cluster point of $\evfilt[\mynet]$, which by (a) is the case just when $\evfilt[\mynet]$ has a superfilter converging to $\mylimit$. But such a superfilter corresponds to a subnet of $\mynet$, and this converges if and only the superfilter does.
+    \item[\subcref{enum:subnet-cluster}]
+    Recall that $\mylimit$ is a cluster point $\mynet$ if and only if it is a cluster point of $\evfilt[\mynet]$, which by \subcref{enum:superfilter-cluster} is the case just when $\evfilt[\mynet]$ has a superfilter converging to $\mylimit$. But such a superfilter corresponds to a subnet of $\mynet$, and this converges if and only the superfilter does.
 \end{proofsec}
 \end{proof}
 
 
 \chapter{Ultrafilters and ultranets}
 
-% TODO decide on whether to use subordination or not
-
 \begin{definition}[Ultrafilters]
     A filter $\calU$ on a set $X$ is said to be an \emph{ultrafilter} if it is a maximal element in $\filters{X}$, i.e. if $\calU \subseteq \calF$ implies that $\calU = \calF$ for any filter $\calF$ on $X$.
 \end{definition}
-
+%
+We have the following characterisation of ultrafilters which motivates the definition of ultranets below, and which we will use in the proof of \cref{thm:ultrafilter-pushforward}.
 
 \begin{proposition}
+    \label{thm:ultrafilter-equivalent-condition}
     A filter $\calU$ on a set $X$ is an ultrafilter if and only if for every $A \subseteq X$ either $A \in \calU$ or $X \setminus A \in \calU$.
 \end{proposition}
 
@@ -652,10 +672,11 @@ The corresponding notion for nets is usually defined as follows:
     A net $\mynet$ in a set $X$ is an \emph{ultranet} or \emph{universal net} if for every $A \subseteq X$, $\mynet$ is eventually in either $A$ or $X \setminus A$.
 \end{definition}
 %
-[TODO ref prop] thus shows that $\mynet$ is an ultranet if and only if $\evfilt[\mynet]$ is an ultrafilter.
+\cref{thm:ultrafilter-equivalent-condition} thus shows that $\mynet$ is an ultranet if and only if $\evfilt[\mynet]$ is an ultrafilter.
 
 
 \begin{theorem}
+    \label{thm:ultrafilter-existence}
     Every filter is contained in an ultrafilter. Equivalently, every net has a universal subnet.
 \end{theorem}
 
@@ -673,22 +694,22 @@ The corresponding notion for nets is usually defined as follows:
 
 \chapter{Continuity}
 
-\begin{definition}
+\begin{definition}[Pushforward of nets and filters]
     Let $f \colon X \to Y$ be a function, $\mynet \colon I \to X$ a net and $\calF$ a filter on $X$.
     %
-    \begin{enumerate}
+    \begin{enumdef}
         \item The \emph{pushforward of $\mynet$ by $f$} is the net $f(\mynet) = f \circ \mynet \colon I \to Y$.
         \item The \emph{pushforward of $\calF$ by $f$} is the filter $f(\calF)$ generated by the filter basis $\set{f(F)}{F \in \calF}$.
-    \end{enumerate}
+    \end{enumdef}
 \end{definition}
 
 \begin{remarkbreak}
-    \begin{enumerate}
+    \begin{enumrem}
         \item If $\mynet \sim \altnet$ then also $f(\mynet) \sim f(\altnet)$. We therefore define the pushforward $f([\mynet])$ of the class $[\mynet]$ by the class $[f(\mynet)]$.
         
         \item If $\calB$ is a basis for the filter $\calF$, then consider the filter $f(\calB)$ generated by the filter basis $\set{f(B)}{B \in \calB}$. We claim that $f(\calB) = f(\calF)$. The inclusion \enquote{$\subseteq$} is clear, and if $G = f(F)$ for some $F \in \calF$, then $B \subseteq F$ for some $B \in \calB$. Hence $f(B) \subseteq G$, so $G \in f(\calB)$ since the latter is upward closed.
         
-        \item We may give a different characterisation of the pushforward $f(\calF)$. Consider the set
+        \item \label{enum:pushforward-filter-equivalent} We may give a different characterisation of the pushforward $f(\calF)$. Consider the set
         %
         \begin{equation*}
             \calG
@@ -698,7 +719,7 @@ The corresponding notion for nets is usually defined as follows:
         This is easily seen to be a filter. We claim that $f(\calF) = \calG$. For all $F \in \calF$ we have $F \subseteq f\preim(f(F))$, so $f\preim(f(F)) \in \calF$, and hence $f(F) \in \calG$. It follows that $f(\calF) \subseteq \calG$.
 
         Conversely, if $G \in \calG$ then $f(f\preim(G)) \subseteq G$. Since $f\preim(G) \in \calF$ we have $G \in f(\calF)$, so $\calG \subseteq f(\calF)$.
-    \end{enumerate}
+    \end{enumrem}
 \end{remarkbreak}
 
 \begin{lemma}
@@ -711,6 +732,7 @@ The corresponding notion for nets is usually defined as follows:
 
 
 \begin{corollary}
+    \label{thm:filter-net-convergence}
     Let $f \colon X \to Y$ be a function, $\mynet$ a net in $X$, and $y \in Y$. Then $f(\mynet) \to y$ if and only if $f(\evfilt[\mynet]) \to y$.
 \end{corollary}
 
@@ -720,56 +742,65 @@ The corresponding notion for nets is usually defined as follows:
 
 
 \begin{proposition}
-    Let $f \colon X \to Y$ be a function between topological spaces, and let $x \in X$. Then the following are equivalent:
+    \label{thm:continuity-filter-net}
+    Let $f \colon X \to Y$ be a function between topological spaces, and let $x \in X$. Then $f$ is continuous at $x$ if and only if $\nhoods{f(x)} \subseteq f(\nhoods{x})$. In particular, the following are equivalent:
     %
-    \begin{enumerate}
-        \item $f$ is continuous at $x$.
-        \item For all nets $\mynet$ in $X$, $\mynet \to x$ implies that $f(\mynet) \to f(x)$.
-        \item For all filters $\calF$ on $X$, $\calF \to x$ implies that $f(\calF) \to f(x)$.
-    \end{enumerate}
+    \begin{enumprop}
+        \item \label{enum:continuity-point} $f$ is continuous at $x$.
+        \item \label{enum:filter-convergence-point} For all filters $\calF$ on $X$, $\calF \to x$ implies that $f(\calF) \to f(x)$.
+        \item \label{enum:net-convergence-point} For all nets $\mynet$ in $X$, $\mynet \to x$ implies that $f(\mynet) \to f(x)$.
+    \end{enumprop}
 \end{proposition}
 
 \begin{proof}
+    If $f$ is continuous at $x$ and $N \in \nhoods{f(x)}$, then there exists an $M \in \nhoods{x}$ such that $f(M) \subseteq N$. But $f(M)$ lies in $f(\nhoods{x})$, and hence so does $N$.
+
+    Conversely, if $\nhoods{f(x)} \subseteq f(\nhoods{x})$ and $N \in \nhoods{f(x)}$, then by definition of $f(\nhoods{x})$ there exists an $M \in \nhoods{x}$ such that $f(M) \subseteq N$, so $f$ is continuous at $x$.
+%
 \begin{proofsec}
-    \item[(a) $\implies$ (b)]
-    For each $N \in \nhoods{f(x)}$ there is an $M \in \nhoods{x}$ such that $f(M) \subseteq N$. Since $\mynet$ is eventually in $M$, $f(\mynet) = f \circ \mynet$ is eventually in $f(M) \subseteq N$, showing that $f(\mynet) \to f(x)$. % TODO: or just use filters? What do I like best?
+    % \item[\subcref{enum:continuity-point} $\implies$ \subcref{enum:net-convergence-point}]
+    % For each $N \in \nhoods{f(x)}$ there is an $M \in \nhoods{x}$ such that $f(M) \subseteq N$. Since $\mynet$ is eventually in $M$, $f(\mynet) = f \circ \mynet$ is eventually in $f(M) \subseteq N$, showing that $f(\mynet) \to f(x)$.
+    
+    \item[\subcref{enum:continuity-point} $\implies$ \subcref{enum:filter-convergence-point}]
+    Recall that $\calF \to x$ means that $\nhoods{x} \subseteq \calF$. Hence $\nhoods{f(x)} \subseteq f(\nhoods{x}) \subseteq f(\calF)$, so $f(\calF) \to f(x)$.
 
-    \item[(b) $\implies$ (c)]
-    This follows immediately from [TODO cor].
+    \item[\subcref{enum:filter-convergence-point} $\implies$ \subcref{enum:continuity-point}]
+    This follows by setting $\calF = \nhoods{x}$.
 
-    \item[(c) $\implies$ (a)]
-    Recall that $\nhoods{x}$ is a filter that converges to $x$. Hence $f(\nhoods{x}) \to f(x)$, which by definition means that $\nhoods{f(x)} \subseteq f(\nhoods{x})$. Each $N \in \nhoods{f(x)}$ thus contains an element of the basis of $f(\nhoods{x})$, namely a set on the form $f(M)$ for some $M \in \nhoods{x}$. Hence $f$ is continuous at $x$.
+    \item[\subcref{enum:filter-convergence-point} $\Leftrightarrow$ \subcref{enum:net-convergence-point}]
+    This follows immediately from \cref{thm:filter-net-convergence}
 \end{proofsec}
 \end{proof}
 
 
 \begin{proposition}
-    Let $\{X_\alpha\}_{\alpha \in A}$ be a family of topological spaces, and set $X = \bigprod_{\alpha \in A} X_\alpha$. Let $\mynet$ be a net in $X$, and let $\calF$ be a filter in $X$. Then we have for $x \in X$ that
+    Let $\{X_\alpha\}_{\alpha \in A}$ be a family of topological spaces, and set $X = \bigprod_{\alpha \in A} X_\alpha$. Let $\mynet$ be a net in $X$, and let $\calF$ be a filter on $X$. Then we have for $x \in X$ that
     %
-    \begin{enumerate}
-        \item $\calF \to x$ if and only if $\pi_\alpha(\calF) \to x_\alpha$ for all $\alpha \in A$, and that
-        \item $\mynet \to x$ if and only if $\pi_\alpha(\mynet) \to x_\alpha$ for all $\alpha \in A$.
-    \end{enumerate}
+    \begin{enumprop}
+        \item \label{enum:product-filter-convergence} $\calF \to x$ if and only if $\pi_\alpha(\calF) \to x_\alpha$ for all $\alpha \in A$, and that
+        \item \label{enum:product-net-convergence} $\mynet \to x$ if and only if $\pi_\alpha(\mynet) \to x_\alpha$ for all $\alpha \in A$.
+    \end{enumprop}
 \end{proposition}
 
 \begin{proof}
-    We prove (a), and (b) is an immediate consequence. The \enquote{only if} part follows from [TODO].
+    We prove \subcref{enum:product-filter-convergence}, and \subcref{enum:product-net-convergence} is an immediate consequence. The \enquote{only if} part follows from \cref{thm:continuity-filter-net} since each $\pi_\alpha$ is continuous.
     
-    Conversely let $N \in \nhoods{x}$, and let $U \in \nhoods{x_\alpha}$ be such that $\pi_\alpha\preim(U) \subseteq N$ for some $\alpha \in A$. Since $\calF$ is a filter, to show that $N \in \calF$ it suffices to show that $\pi_\alpha\preim(U) \in \calF$. Since $\pi_\alpha(\calF) \to x_\alpha$ we have $U \in \pi_\alpha(\calF)$, and by [TODO ref remark] it follows that $\pi_\alpha\preim(U) \in \calF$. Hence $\calF \to x$ as desired.
+    Conversely let $N \in \nhoods{x}$, and let $U \in \nhoods{x_\alpha}$ be such that $\pi_\alpha\preim(U) \subseteq N$ for some $\alpha \in A$. Since $\calF$ is a filter, to show that $N \in \calF$ it suffices to show that $\pi_\alpha\preim(U) \in \calF$. Since $\pi_\alpha(\calF) \to x_\alpha$ we have $U \in \pi_\alpha(\calF)$, and by \cref{enum:pushforward-filter-equivalent} it follows that $\pi_\alpha\preim(U) \in \calF$. Hence $\calF \to x$ as desired.
 \end{proof}
 
 
 \begin{proposition}
+    \label{thm:ultrafilter-pushforward}
     Let $f \colon X \to Y$ be a function, $\mynet$ an ultranet in $X$ and $\calU$ an ultrafilter on $X$. Then
     %
-    \begin{enumerate}
-        \item $f(\calU)$ is an ultrafilter on $Y$, and
-        \item $f(\mynet)$ is an ultranet on $Y$.
-    \end{enumerate}
+    \begin{enumprop}
+        \item \label{enum:ultrafilter-pushforward} $f(\calU)$ is an ultrafilter on $Y$, and
+        \item \label{enum:ultranet-pushforward} $f(\mynet)$ is an ultranet on $Y$.
+    \end{enumprop}
 \end{proposition}
 
 \begin{proof}
-    As usual, (b) follows immediately from (a). To prove (a) we use [TODO ref], so let $B \subseteq Y$. Then either $f\preim(B) \in \calU$ or $f\preim(Y \setminus B) = X \setminus f\preim(B) \in \calU$. By [TODO rem ref] either $B \in f(\calU)$ or $Y \setminus B \in f(\calU)$, so $f(\calU)$ is an ultrafilter.
+    As usual, \subcref{enum:ultranet-pushforward} follows immediately from \subcref{enum:ultrafilter-pushforward}. To prove \subcref{enum:ultrafilter-pushforward} we use \cref{thm:ultrafilter-equivalent-condition}, so let $B \subseteq Y$. Then either $f\preim(B) \in \calU$ or $f\preim(Y \setminus B) = X \setminus f\preim(B) \in \calU$. By \cref{enum:pushforward-filter-equivalent} either $B \in f(\calU)$ or $Y \setminus B \in f(\calU)$, so $f(\calU)$ is an ultrafilter.
 \end{proof}
 
 
@@ -778,54 +809,56 @@ The corresponding notion for nets is usually defined as follows:
 \newcommand{\calK}{\mathcal{K}}
 
 \begin{proposition}
+    \label{thm:compactness-equivalent}
     Let $X$ be a topological space. The following are equivalent:
     %
-    \begin{enumerate}
-        \item $X$ is compact.
-        \item Every filter on $X$ has a cluster point.
-        \item Every filter on $X$ has a convergent superfilter.
-        \item Every ultrafilter on $X$ converges.
-    \end{enumerate}
+    \begin{enumprop}
+        \item \label{enum:space-compact} $X$ is compact.
+        \item \label{enum:every-filter-cluster} Every filter on $X$ has a cluster point.
+        \item \label{enum:every-filter-convergent-superfilter} Every filter on $X$ has a convergent superfilter.
+        \item \label{enum:every-ultrafilter-converges} Every ultrafilter on $X$ converges.
+    \end{enumprop}
     %
     These are equivalent to the corresponding claims concerning nets:
-    \begin{enumerate}[resume]
+    \begin{enumprop}[resume]
         \item Every net in $X$ has a cluster point.
         \item Every net in $X$ has a convergent subnet.
         \item Every ultranet in $X$ converges.
-    \end{enumerate}
+    \end{enumprop}
 \end{proposition}
 %
-We will use the following well-known characterisation of compactness: The space $X$ is compact if and only if for every collection $\calK$ of closed subsets with the finite intersection property, $\bigintersect_{K \in \calK} K \neq \emptyset$.
+We will use the following well-known characterisation of compactness: The space $X$ is compact if and only if for every collection $\calA$ of closed subsets with the finite intersection property, $\bigintersect_{A \in \calA} A \neq \emptyset$.
 
 \begin{proof}
 \begin{proofsec}
-    \item[(a) $\implies$ (b)]
-    Let $\calF$ be a filter on $X$. Clearly $\calF$ itself has the finite intersection property, and so does the collection $\set{ \closure{F}}{F \in \calF}$. Hence $\bigintersect_{F \in \calF} \closure{F} \neq \emptyset$, so $\calF$ has a cluster point by [TODO ref].
+    \item[\subcref{enum:space-compact} $\implies$ \subcref{enum:every-filter-cluster}]
+    Let $\calF$ be a filter on $X$. Clearly $\calF$ itself has the finite intersection property, and so does the collection $\set{ \closure{F}}{F \in \calF}$. Hence $\bigintersect_{F \in \calF} \closure{F} \neq \emptyset$, so $\calF$ has a cluster point by \cref{enum:filter-cluster-equivalent}.
 
-    \item[(b) $\implies$ (c)]
-    This is an immediate consequence of [TODO ref].
+    \item[\subcref{enum:every-filter-cluster} $\implies$ \subcref{enum:every-filter-convergent-superfilter}]
+    This is an immediate consequence of \cref{enum:superfilter-cluster}.
 
-    \item[(c) $\implies$ (d)]
+    \item[\subcref{enum:every-filter-convergent-superfilter} $\implies$ \subcref{enum:every-ultrafilter-converges}]
     If $\calU$ is an ultrafilter on $X$, then it has a convergent superfilter $\calF$. But since $\calU = \calF$, $\calU$ itself must be convergent.
 
-    \item[(d) $\implies$ (a)]
-    Assume that there is a collection $\calA$ of subsets of $X$ with the finite intersection property and with $\bigintersect_{A \in \calA} A = \emptyset$. The collection
+    \item[\subcref{enum:every-ultrafilter-converges} $\implies$ \subcref{enum:space-compact}]
+    Assume that there is a collection $\calA$ of closed subsets of $X$ with the finite intersection property and with $\bigintersect_{A \in \calA} A = \emptyset$. The collection
     %
     \begin{equation*}
         \calB
             = \set[\bigg]{ \bigintersect_{i=1}^n A_i }{ n \in \ints_+, A_1, \ldots, A_n \in \calA }
     \end{equation*}
     %
-    is clearly a filter basis, so let $\calF$ be the filter it generates. By [TODO ref] $\calF$ is contained in an ultrafilter $\calU$. Now notice that
+    is clearly a filter basis, so let $\calF$ be the filter it generates. By \cref{thm:ultrafilter-existence} $\calF$ is contained in an ultrafilter $\calU$. Now notice that
     %
     \begin{equation*}
         \bigintersect_{B \in \calU} \closure{B}
             \subseteq \bigintersect_{B \in \calB} \closure{B}
             = \bigintersect_{B \in \calB} B
-            = \emptyset.
+            \subseteq \bigintersect_{A \in \calA} A
+            = \emptyset,
     \end{equation*}
     %
-    Thus $\calU$ has no cluster points, so it does not converge.
+    where the first equality follows since each $B \in \calB$ is closed. Thus $\calU$ has no cluster points, so it does not converge.
 \end{proofsec}
 \end{proof}
 
@@ -835,7 +868,7 @@ We will use the following well-known characterisation of compactness: The space 
 \end{theorem}
 
 \begin{proof}
-    Let $\calU$ be an ultrafilter in $X = \bigprod_{\alpha \in A} X_\alpha$. For all $\alpha \in A$, $\pi_\alpha(\calU)$ is an ultrafilter in $X_\alpha$ by [TODO ref], so since $X_\alpha$ is compact [TODO ref] implies that $\pi_\alpha(\calU)$ converges. [TODO ref] in turn implies that $\calU$ converges, so another application of [TODO ref] yields compactness of $X$.
+    Let $\calU$ be an ultrafilter in $X = \bigprod_{\alpha \in A} X_\alpha$. For all $\alpha \in A$, $\pi_\alpha(\calU)$ is an ultrafilter in $X_\alpha$ by \cref{enum:ultrafilter-pushforward}, so since $X_\alpha$ is compact \cref{thm:compactness-equivalent} implies that $\pi_\alpha(\calU)$ converges. \cref{enum:product-filter-convergence} in turn implies that $\calU$ converges, so another application of \cref{thm:compactness-equivalent} yields compactness of $X$.
 \end{proof}
 
 
